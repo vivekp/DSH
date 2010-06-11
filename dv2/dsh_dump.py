@@ -12,6 +12,13 @@
 # none of these requirements is met by the existing dumpers.
 #
 
+#
+# 10-06-08
+# --------
+# Changes : dump_one ->  accomodate new fieldtypes
+#         : dump_selected ->  modified to accomodate new tables definition
+#         : allDbTables expanded
+#
 
 
 import sys,os,subprocess,logging
@@ -181,7 +188,7 @@ def dump_one(obj, define, tarPath):
 
         if fieldType == 'OptionalFollowUpsType' or \
            fieldType == 'OptionalOwnerType' or \
-           fieldType == 'OptionalKeyType':
+           fieldType == 'OptionalKeyType':   # new fieldType
 	    #
             # like the above, except it's optional.
             # so if it's blank, we don't freak out.
@@ -197,7 +204,7 @@ def dump_one(obj, define, tarPath):
 
         if fieldType == 'OptionalKeyWordsType' or \
            fieldType == 'OptionalPersonsType' or \
-	   fieldType == 'OptionalSelfsType':
+	   fieldType == 'OptionalSelfsType':   # new fieldType
             #
             # the intended_audience field can be dealt with like this too.
             #

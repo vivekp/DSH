@@ -4,6 +4,17 @@
 # it's repetition but this is easier for me to understand and manage.
 # 
 
+#
+# 10-06-08
+# --------
+# (1)two new types added : OptionalKeyType 
+#                         -> models.ForeignKey(KeyWord,blank=True,null=True)
+#                      : OptionalSelfsType
+#                         -> models.ManyToManyField('self',blank=True,null=True)
+#
+# (2)OptionalKeyWordsType extended from models.ManyToMany(KeyWord,blank=True)
+#                                  to models.ManyToMany(KeyWord,blank=True,null=True)
+#
 
 
 #
