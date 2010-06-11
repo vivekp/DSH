@@ -1,0 +1,14 @@
+
+
+ 10-06-09
+----------
+ (1)two new types added : OptionalKeyType 
+                         -> models.ForeignKey(KeyWord,blank=True,null=True)
+                      : OptionalSelfsType
+                         -> models.ManyToManyField('self',blank=True,null=True)
+
+ (2)OptionalKeyWordsType extended from : models.ManyToMany(KeyWord,blank=True)
+                                  to : models.ManyToMany(KeyWord,blank=True,null=True)
+
+ (3) A few changes in dsh_dump to account for dump of new tables
+
