@@ -20,7 +20,10 @@ import dsh_utils,dsh_config,dsh_agi
 os.environ['DJANGO_SETTINGS_MODULE'] = dsh_config.lookup(
     'DJANGO_SETTINGS_MODULE')
 dsh_django_utils2.add_to_sys_path(dsh_config.lookup('django_sys_paths'))
-from dvoice.db.models import Person,Organization,Item,Event,KeyWord
+from dvoice.db.models import Person,Organization,Item,Event,KeyWord,ZObject01,ZObject02,ZObject03,ZObject04,ZObject05,ZObject06,ZObject07,ZObject08
+
+
+
 import dsh_django_utils,dsh_dump_models,dsh_dump
 
 
