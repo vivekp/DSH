@@ -10,5 +10,6 @@
  (2)OptionalKeyWordsType extended from : models.ManyToMany(KeyWord,blank=True)
                                   to : models.ManyToMany(KeyWord,blank=True,null=True)
 
- (3) A few changes in dsh_dump to account for dump of new tables
-
+ (3) A few changes in dsh_dump in defs load_one, load_all, dump_selected, dump_one to account for dump of new tables
+ 
+ (4) Just minor additions to dsh_load.py

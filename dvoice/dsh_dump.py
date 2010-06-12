@@ -18,7 +18,10 @@
 # Changes : dump_one ->  accomodate new fieldtypes
 #         : dump_selected ->  modified to accomodate new tables definition
 #         : allDbTables expanded
+#         : load_all -> modified to load new tables
+#         : load_one -> two new field types added to load_one
 #
+
 
 import sys,os,subprocess,logging
 import dvoice.db.models
@@ -300,7 +303,6 @@ def dump_one_table(dumpFile, dumpPath, tarPath, whatKind, dumpDefinition,
         selectedObjs = whatKind.objects.filter(u17=True)
         
     ans = dumpedVarName + ' = [\n'
-    test = write_dump_file(dumpFile,dumpPath,ans)
     errorMsg = ''
     for obj in selectedObjs:
         dumpStr,errStr = dump_one(obj, dumpDefinition, tarPath)
@@ -657,7 +659,8 @@ def load_one(dump, whatKind, overWrite, itemsToSkip=None):
 
         if fieldType == 'OptionalFollowUpsType' or \
            fieldType == 'OptionalKeyWordsType' or \
-           fieldType == 'OptionalPersonsType':
+           fieldType == 'OptionalPersonsType' or \
+	   fieldType == 'OptionalSelfsType':
             #
             # this is to be dealt with in a second round.
             # so we skip it in this round.
@@ -678,7 +681,17 @@ def load_one(dump, whatKind, overWrite, itemsToSkip=None):
                 continue
             setattr(obj, fieldName, person)
             continue
-            
+        
+	if fieldType == 'OptionalKeyType':
+	    #
+	    # this is used by Organisation table  
+	    #	
+            keyWord = get_foreign_key(dvoice.db.models.KeyWord, fieldValue)
+	    if not keyWord:
+		continue
+	    setattr(obj, fieldName, person)
+	    continue	  
+   
         #
         # all other types of fields (like string and int) are easy to set.
         #
@@ -882,7 +895,7 @@ def get_foreign_key_list(whatKind, dshUidList, required=False):
             
     
 
-def load_all(allKeyWords, allOrgs, allPersons, allItems, allEvents, overWrite):
+def load_all(allKeyWords, allOrgs, allPersons, allItems, allEvents, allZObject01s, allZObject02s, allZObject03s, allZObject04s, allZObject05s, allZObject06s, allZObject07s, allZObject08s, overWrite):
     """called by dsh_load.py"""
 
     #
@@ -939,6 +952,77 @@ def load_all(allKeyWords, allOrgs, allPersons, allItems, allEvents, overWrite):
     for event in allEvents:
         load_one(event, dvoice.db.models.Event, overWrite)
 
+    #
+    # zObject01s.
+    #
+    dsh_utils.give_news('dsh_dump.load_all: loading zobject01s...',
+		        logging.info)
+    for zObject01 in allZObject01s:
+	load_one(zObject01, dvoice.db.models.ZObject01, overWrite)
+
+
+    #
+    # zObject02s.
+    #
+    dsh_utils.give_news('dsh_dump.load_all: loading zobject02s...',
+		        logging.info)
+    for zObject02 in allZObject02s:
+	load_one(zObject02, dvoice.db.models.ZObject02, overWrite)
+
+
+    #
+    # zObject03s.
+    #
+    dsh_utils.give_news('dsh_dump.load_all: loading zobject03s...',
+		        logging.info)
+    for zObject03 in allZObject03s:
+	load_one(zObject03, dvoice.db.models.ZObject03, overWrite)
+
+
+
+    #
+    # zObject04s.
+    #
+    dsh_utils.give_news('dsh_dump.load_all: loading zobject04s...',
+		        logging.info)
+    for zObject04 in allZObject04s:
+	load_one(zObject04, dvoice.db.models.ZObject04, overWrite)
+
+
+    #
+    # zObject05s.
+    #
+    dsh_utils.give_news('dsh_dump.load_all: loading zobject05s...',
+		        logging.info)
+    for zObject05 in allZObject05s:
+	load_one(zObject05, dvoice.db.models.ZObject05, overWrite)
+
+
+    #
+    # zObject06s.
+    #
+    dsh_utils.give_news('dsh_dump.load_all: loading zobject06s...',
+		        logging.info)
+    for zObject06 in allZObject06s:
+	load_one(zObject06, dvoice.db.models.ZObject06, overWrite)
+
+
+    #
+    # zObject07s.
+    #
+    dsh_utils.give_news('dsh_dump.load_all: loading zobject07s...',
+		        logging.info)
+    for zObject07 in allZObject07s:
+	load_one(zObject07, dvoice.db.models.ZObject07, overWrite)
+
+
+    #
+    # zObject08s.
+    #
+    dsh_utils.give_news('dsh_dump.load_all: loading zobject08s...',
+		        logging.info)
+    for zObject08 in allZObject08s:
+	load_one(zObject08, dvoice.db.models.ZObject08, overWrite)
 
 
 def mark_selected_foreign(thisTable, foreignKeyFieldName,
