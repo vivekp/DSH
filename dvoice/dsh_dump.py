@@ -19,7 +19,8 @@
 #         : dump_selected ->  modified to accomodate new tables definition
 #         : allDbTables expanded
 #         : load_all -> modified to load new tables
-#         : load_one -> two new field types added to load_one
+#         : load_one -> two new field types added 
+#         : load_pointers_for_one -> two new field types added
 #
 
 
@@ -660,7 +661,7 @@ def load_one(dump, whatKind, overWrite, itemsToSkip=None):
         if fieldType == 'OptionalFollowUpsType' or \
            fieldType == 'OptionalKeyWordsType' or \
            fieldType == 'OptionalPersonsType' or \
-	   fieldType == 'OptionalSelfsType':
+	   fieldType == 'OptionalSelfsType': # -> models.ManyToMany('self',blank=True,null=True)
             #
             # this is to be dealt with in a second round.
             # so we skip it in this round.
@@ -682,14 +683,14 @@ def load_one(dump, whatKind, overWrite, itemsToSkip=None):
             setattr(obj, fieldName, person)
             continue
         
-	if fieldType == 'OptionalKeyType':
+	if fieldType == 'OptionalKeyType': # -> models.ForeignKey(KeyWord,blank=True,null=True) 
 	    #
 	    # this is used by Organisation table  
 	    #	
             keyWord = get_foreign_key(dvoice.db.models.KeyWord, fieldValue)
 	    if not keyWord:
 		continue
-	    setattr(obj, fieldName, person)
+	    setattr(obj, fieldName, keyWord)
 	    continue	  
    
         #
@@ -774,6 +775,27 @@ def load_pointers_for_one(dump, whatKind, overWrite, itemsToSkip):
             setattr(obj, fieldName, followItem)
             continue
 
+        if fieldType == 'OptionalOwnerType': # new fieldType added - 10-06-09
+            #
+            # fieldValue is a dsh_uid.
+            # get the item that has this dsh_uid.
+            #
+            i0xItem = get_foreign_key(
+                dvoice.db.models.Person, fieldValue)
+            if not i0xItem:
+                dsh_utils.give_bad_news(
+                    'dsh_dump.load_pointers_for_one: ' + \
+                    'cannot find i05/i06/i07/i08 item: '+\
+                    fieldValue, logging.error)
+                #
+                # because it's optional, we'll just move on.
+                # not a big deal.
+                #
+                continue
+            setattr(obj, fieldName, i0xItem)
+            continue
+
+
         if fieldType == 'OptionalKeyWordsType':
             #
             # instead of a single foreign key,
@@ -839,7 +861,34 @@ def load_pointers_for_one(dump, whatKind, overWrite, itemsToSkip):
             #    obj.save()
             setattr(obj, fieldName, audience)
             continue
-            
+      
+        if fieldType == 'OptionalSelfsType': # new field type added 10-06-09
+            #
+            # like the KeyWord type above.
+            #
+            i0xItem = get_foreign_key_list(dvoice.db.models.Item,
+                                           fieldValue)
+            if i0xItem == None:
+                #
+                # this shouldn't happen. in the worst case, it should've
+                # been an empty list.
+                #
+                dsh_utils.give_bad_news(
+                    'dsh_dump.load_one: something bad happened with ' +\
+                    'loading i09/i10/i11/i12: ' + repr(i0xItem),
+                    logging.critical)
+                continue
+            if i0xItem == []:
+                continue
+            #
+            # it turns out I must do a save to obtain a primary key,
+            # otherwise I can't set many-to-many attr.
+            #
+            #if newObj:
+            #    obj.save()
+            setattr(obj, fieldName, i0xItem)
+            continue
+      
 
         #
         # do nothing with any other types of fields.

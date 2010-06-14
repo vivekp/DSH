@@ -73,7 +73,7 @@ ZObject01Def = {
     'database_name': ['StrType'],
     'port': ['StrType'],
     'port_lko': ['StrType'],
-    'reschedule_wipe_disable': ['StrType'],
+    'reschedule_wipe_disable': ['BoolType'],
     'disable_say_dates': ['BoolType'],
 }
 
@@ -165,6 +165,7 @@ PersonDef = {
     'date_birth': ['DateType'],
     'birth_date_approximate': ['BoolType'],
     'age': ['IntType'],
+    'date_birth_change': ['DateType'],
     'birth_date_approximate_change': ['BoolType'],
     'current_dial': ['BoolType'],
     'person_key_words': ['OptionalKeyWordsType'], 

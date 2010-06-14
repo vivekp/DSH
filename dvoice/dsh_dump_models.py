@@ -70,7 +70,7 @@ ZObject01Def = {
     'asterisk_extension': ['StrType'],
     'database_name': ['StrType'],
     'port': ['StrType'],
-    'reschedule_wipe_disable': ['StrType'],
+    'reschedule_wipe_disable': ['BoolType'],
     'disable_say_dates': ['BoolType'],
 }
 
