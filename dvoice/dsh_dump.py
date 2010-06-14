@@ -1181,6 +1181,17 @@ def propagate_selections():
     mark_selected_foreign(dvoice.db.models.Person, 'organization')
     mark_selected_foreign(dvoice.db.models.Item, 'key_words', kind='many')
 
+    # new foreign markers: 10-06-09
+    mark_selected_foreign(dv2.db.models.Organization, 'org_key_word')
+    mark_selected_foreign(dv2.db.models.Person, 'person_key_words', kind='many')
+    mark_selected_foreign(dv2.db.models.Item, 'i06')
+    mark_selected_foreign(dv2.db.models.Item, 'i07')
+    mark_selected_foreign(dv2.db.models.Item, 'i08')
+    mark_selected_foreign(dv2.db.models.Item, 'i13', kind='many')
+    mark_selected_foreign(dv2.db.models.Item, 'i14', kind='many')
+    mark_selected_foreign(dv2.db.models.Item, 'i15', kind='many')
+    mark_selected_foreign(dv2.db.models.Item, 'i16', kind='many')
+
 
 
 def select_box(whatKind, dshUid):
